@@ -2,3 +2,23 @@ Dies ist eine Textdatei. Test 2}
 Dies ist eine neue Zeile Text.
 Noch eine Zeile zum Feierabend :-)
 Das ist dann jetzt der neue Brunch!
+
+
+SELECT Distinct  userlist.userid as usr,  userlist.fullname,   ARRAY_AGG(msgarray.msg), as msg,  ARRAY_AGG(msgarray.msgid), as msgid,  userlist.email as email   FROM userlist    right outer JOIN (SELECT  userid, doc,  ARRAY_AGG(message ORDER By creationdate)::text as msg,   ARRAY_AGG(messageid ORDER By creationdate)::text as msgid  FROM notifications  Where (((Extract(HOUR from deliverytime)*60) + Extract(Minute from deliverytime)) - ((Extract(Hour from now())*60) + Extract(MINUTE from now()))) < 0  AND notifications.email = 0   GROUP BY  userid, doc ) as msgarray  on (userlist.userid = msgarray.userid) Group by  userlist.userid,  userlist.fullname, userlist.email
+
+curl -X POST https://graph.facebook.com/oauth/access_token -d "client_id=318846461783687&client_secret=728b6b0e3ac4734a6a3965de8ef46d4a&grant_type=client_credentials&redirect_uri="
+
+
+curl \
+  -X POST \
+  "https://graph.facebook.com/app/objects/books.book"  \
+  -F "access_token=318846461783687|SzdIdkg9BaeLu4IjpBQRIisW2U4" \
+  -F "object={
+    \"title\":\"The Hunt for Red October\",
+    \"image\":\"http://ecx.images-amazon.com/images/I/314leP6WviL._SL500_AA300_.jpg\",
+    \"url\":\"https://link.you.want.displayed/example/hunt-for-red-october-link\",
+    \"description\":\"Classic cold war technothriller\",
+    \"data\": {
+      \"isbn\":\"425240339\"
+    }
+  }"
